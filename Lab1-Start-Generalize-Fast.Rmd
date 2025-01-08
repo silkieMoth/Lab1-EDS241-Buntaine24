@@ -118,7 +118,10 @@ Review of regression: Ordinary Least Squares (OLS)
 
 ```{r, eval=FALSE}
 
-m1_ols <- 
+m1_ols <- lm(
+    waste_piles ~ treat,
+    data = post_treat_subset
+) 
 
 summ(m1_ols, model.fit = FALSE)
 ```
@@ -195,10 +198,16 @@ ggplot(post_treat_subset, aes(x = waste_piles)) +
 
 ### Ok, lets try estimating a Poisson model using `glm()`
 ```{r, eval=FALSE}
-m2_poisson <- 
+m2_poisson <- glm(
+    waste_piles ~ treat,
+    family = poisson(link = 'log'),
+    data = post_treat_subset
+)
 
 summ(m2_poisson, model.fit = FALSE)
 
+# percent change
+exp(-0.38) - 1
 ```
 
 **Check overdispersion assumption**
@@ -230,7 +239,11 @@ check_overdispersion(m2_poisson)
 -   Instead of modeling the count directly, we transform the outcome variable by taking the *natural log* 
 
 ```{r, eval=FALSE}
-m3_log <- 
+m3_log <- lm(
+    log(waste_piles) ~ treat,
+    data = post_treat_subset
+    
+)
 
 summ(m3_log, model.fit = FALSE)
 ```
@@ -317,7 +330,7 @@ post_treat_subset %>%
 m4_control <- lm(
     log(waste_piles) ~ 
         treat + 
-        , ## Add control
+        log(pre_count_avg), ## Add control
     data = post_treat_subset)
 
 summ(m4_control, model.fit = FALSE)
