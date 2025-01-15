@@ -246,6 +246,9 @@ m3_log <- lm(
 )
 
 summ(m3_log, model.fit = FALSE)
+
+# calculate percent change from a log ols model
+exp(-.42) - 1
 ```
 
 
@@ -371,7 +374,7 @@ m5_control2 <- lm(
     log(waste_piles) ~ 
         treat +
         log(pre_count_avg) + 
-        , ## Add control
+        rain_0_48hrs + rain_49_168hrs, ## Add control
     data = post_treat_subset)
 
 summ(m5_control2,
